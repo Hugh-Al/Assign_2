@@ -10,6 +10,8 @@
 
 #include "Idea.h"
 #include "AVL_ADT.h"
+
+#include <vector>
 #include <iterator>
 #include <algorithm>
 #include <set>
@@ -48,7 +50,8 @@ public:
 	void displayBank();
 
 	void ideaToIndex(Idea);
-	void query(string);
+	Index query(string);
+	void query2(string);
 
 	AvlTree<Index, string> getTree() {
 		return invertedIndex;

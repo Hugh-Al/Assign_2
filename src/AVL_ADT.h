@@ -687,9 +687,11 @@ NODE<TYPE>*  AvlTree<TYPE, KTYPE>
 	         return _retrieve (key, root->left);
 	     else if (key > root->data.key)
 	         return _retrieve (key, root->right);
-	     else
+	     else{
 	         // Found equal key
+	    	 cout << "!!!!!!!!found!!!!!!!";
 	         return (root);
+	     }
 	    } // if root
 	else
 	    //Data not in tree

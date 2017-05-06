@@ -52,7 +52,8 @@ int main() {
 
 	//testing.displayBank();
 //	testing.getTree().AVL_Print();
-	testing.query("candidate");
+	testing.query2("wife AND THE");
+	testing.query2("A OR kiss");
 
 
 	testing.getTree().AVL_Traverse(print);

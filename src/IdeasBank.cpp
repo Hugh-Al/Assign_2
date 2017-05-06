@@ -134,19 +134,80 @@ void IdeasBank::ideaToIndex(Idea idea) {
 	}
 }
 
-void IdeasBank::query(string word) {
+Index IdeasBank::query(string word) {
 	Index out;
 	bool found = false;
-	found = invertedIndex.AVL_Retrieve(word, out);
-	if (found) {
-		cout << word << " is in idea: ";
-		for (set<int>::iterator i = out.idList.begin(); i != out.idList.end();
+//	found = invertedIndex.AVL_Retrieve(word, out);
+	invertedIndex.AVL_Retrieve(word, out);
+//	if (found) {
+//		return out;
+//	}else {
+//		cout << word << " not found in inverted index: ";
+//	}
+
+	cout << " value is " << out.key << endl;
+	return out;
+}
+
+void IdeasBank::query2(string argument) {
+	stringstream ss(argument);
+	string word;
+	vector<string> split;
+
+	while (ss >> word) {
+		split.push_back(word);
+	}
+	if (split.size() == 1) {
+		cout << "1 arg " << split.at(0);
+		query(split.at(0));
+		return;
+	}
+
+	string boolCond = split.at(1);
+	if (boolCond == "AND") {
+		Index first = query(parseContent(split.at(0)));
+		Index second = query(parseContent(split.at(2)));
+		set<int> intersect;
+		set_intersection(first.idList.begin(), first.idList.end(),
+				second.idList.begin(), second.idList.end(),
+				std::inserter(intersect, intersect.begin()));
+		cout << "Common id is: ";
+		for (set<int>::iterator i = intersect.begin(); i != intersect.end();
 				++i) {
 			cout << *i << ", ";
 		}
-		cout << endl << endl;
-	}else {
-		cout << word << " not found in inverted index: ";
+		cout << endl;
+	} else if (boolCond == "OR") {
+		Index first = query(parseContent(split.at(0)));
+		Index second = query(parseContent(split.at(2)));
+		set<int> unionOfId = first.idList;
+		unionOfId.insert(second.idList.begin(), second.idList.end());
+		cout << "Id are: ";
+		for (set<int>::iterator i = unionOfId.begin(); i != unionOfId.end();
+				++i) {
+			cout << *i << ", ";
+		}
+		cout << endl;
+	} else {
+		cout
+				<< "Please provided correct argument format replacing boolean with either AND or OR"
+				<< endl;
+		cout << "word (BOOLEEAN OPERATOR) word" << endl;
 	}
-	cout << endl  << "------------------------" << endl;
+
+//	Index out;
+//	bool found = false;
+//	found = invertedIndex.AVL_Retrieve(word, out);
+//	if (found) {
+//		cout << word << " is in idea: ";
+//		for (set<int>::iterator i = out.idList.begin(); i != out.idList.end();
+//				++i) {
+//			cout << *i << ", ";
+//		}
+//		cout << endl << endl;
+//	}else {
+//		cout << word << " not found in inverted index: ";
+//	}
+//	cout << endl  << "------------------------" << endl;
 }
+
