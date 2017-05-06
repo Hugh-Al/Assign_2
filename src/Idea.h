@@ -23,6 +23,7 @@ public:
 	string getProposer() const;
 	vector<string> getKeywords() const;
 	void toString();
+	bool findWord(string);
 	bool findContent(string);
 	bool findKeyword(string);
 private:

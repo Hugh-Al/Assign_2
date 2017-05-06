@@ -49,9 +49,10 @@ int main() {
 
 	IdeasBank testing;
 	testing.insertFile("input.txt");
-	testing.insertData();
+
 	//testing.displayBank();
 //	testing.getTree().AVL_Print();
+	testing.query("candidate");
 
 
 	testing.getTree().AVL_Traverse(print);

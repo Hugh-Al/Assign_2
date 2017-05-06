@@ -133,3 +133,20 @@ void IdeasBank::ideaToIndex(Idea idea) {
 		invertedIndex.AVL_Insert(item);
 	}
 }
+
+void IdeasBank::query(string word) {
+	Index out;
+	bool found = false;
+	found = invertedIndex.AVL_Retrieve(word, out);
+	if (found) {
+		cout << word << " is in idea: ";
+		for (set<int>::iterator i = out.idList.begin(); i != out.idList.end();
+				++i) {
+			cout << *i << ", ";
+		}
+		cout << endl << endl;
+	}else {
+		cout << word << " not found in inverted index: ";
+	}
+	cout << endl  << "------------------------" << endl;
+}

@@ -54,6 +54,10 @@ void Idea::toString() {
 	cout << "Content: " << content << endl;
 }
 
+bool Idea::findWord(string word){
+	return (findContent(word) || findKeyword(word));
+}
+
 bool Idea::findContent(string word) {
 	return content.find(word);
 }
