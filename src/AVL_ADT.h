@@ -156,6 +156,7 @@ NODE<TYPE>*  AvlTree<TYPE,  KTYPE>
 
 	//If root already in AVL_tree
 	if(newPtr->data.key == root->data.key){
+			root->data.idList.insert(newPtr->data.idList.begin(), newPtr->data.idList.end());
 			return root;
 		}
 
@@ -881,6 +882,7 @@ template <class TYPE, class KTYPE>
 void  AvlTree<TYPE, KTYPE> :: AVL_Print (void)
 {
 /*  statements */
+	cout << "Begin print" << endl;
     _print (tree, 0);
     return;
 }   /* AVL_PRINT */

@@ -12,8 +12,24 @@
 #include "AVL_ADT.h"
 #include <iterator>
 #include <algorithm>
+#include <set>
 #include <string>
 #include <fstream>
+
+struct Index {
+	string key;
+	set<int> idList;
+	Index() {
+	}
+	Index(string value, int id) {
+		key = value;
+		idList.insert(id);
+	}
+	Index(const Index& copy) {
+		key = copy.key;
+		idList = copy.idList;
+	}
+};
 
 class IdeasBank {
 public:
@@ -27,18 +43,17 @@ public:
 	vector<string> stringToKeywords(string);
 	string parseContent(string);
 
-
 	void displayIdea(int);
 	void deleteIdea(int);
 	void displayBank();
 
-	void ideaToIndex(Idea, string);
+	void ideaToIndex(Idea);
+	void query(string);
 
-	struct Index{
-		string key;
-		vector<int> idList;
-	};
-
+	AvlTree<Index, string> getTree() {
+		return invertedIndex;
+	}
+	;
 
 private:
 	vector<Idea> bank;

@@ -41,15 +41,17 @@ void IdeasBank::insertData() {
 			std::ptr_fun<int, int>(&std::ispunct));
 	Idea newIdea(name, keywords, parsedLineInput);
 	bank.push_back(newIdea);
+	ideaToIndex(newIdea);
 
 }
 
 void IdeasBank::insertIdea(Idea newIdea) {
 	bank.push_back(newIdea);
+	ideaToIndex(newIdea);
 }
 
 void IdeasBank::insertFile(string file) {
-	ifstream dataInput("input.txt");
+	ifstream dataInput(file.c_str());
 	string word, propName, stringKeyword, tempContent, clearLine;
 
 	while (!dataInput.eof()) {
@@ -61,11 +63,10 @@ void IdeasBank::insertFile(string file) {
 
 		//convert string to keyword, keep content with punctuations? function ready to remove it
 		vector<string> tempKeyword = stringToKeywords(stringKeyword);
+
 		Idea tempIdea(propName, tempKeyword, tempContent);
 		bank.push_back(tempIdea);
-
-		string parsedContent = parseContent(tempContent);
-		ideaToIndex(tempIdea, parsedContent);
+		ideaToIndex(tempIdea);
 	}
 }
 
@@ -113,17 +114,22 @@ void IdeasBank::displayBank() {
 	}
 }
 
-void IdeasBank::ideaToIndex(Idea idea, string parsed) {
+void IdeasBank::ideaToIndex(Idea idea) {
 	//tokenise everything
-	//keywords are already tokenised, tokenise
-	Index item;
 	int indexID = idea.getID();
 	vector<string> test = idea.getKeywords();
 	for (vector<string>::const_iterator i = test.begin(); i != test.end();
 			++i) {
-		cout << *i << ", ";
-//		item.key = i;
-//		item.idList.push_back(indexID);
-//		invertedIndex.AVL_Insert(item);
+		string value = *i;
+		Index item(value, indexID);
+		invertedIndex.AVL_Insert(item);
+	}
+
+	string parsedContent = parseContent(idea.getContent());
+	string buf;
+	stringstream ss(parsedContent);
+	while (ss >> buf) {
+		Index item(buf, indexID);
+		invertedIndex.AVL_Insert(item);
 	}
 }

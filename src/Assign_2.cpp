@@ -12,6 +12,14 @@
 #include "IdeasBank.h"
 using namespace std;
 
+void print(Index ss) {
+		cout << ss.key << "- {";
+		for(set<int>::iterator i = ss.idList.begin(); i != ss.idList.end(); ++i){
+			cout << *i << ",";
+		}
+		cout << "}" << endl;
+	}
+
 int main() {
 //	vector<string> keyword;
 //	vector<string> k2, k3;
@@ -41,7 +49,12 @@ int main() {
 
 	IdeasBank testing;
 	testing.insertFile("input.txt");
-	testing.displayBank();
+	testing.insertData();
+	//testing.displayBank();
+//	testing.getTree().AVL_Print();
+
+
+	testing.getTree().AVL_Traverse(print);
 
 	return 0;
 }
