@@ -20,26 +20,26 @@ Idea::~Idea() {
 
 int Idea::id = 0;
 
-Idea::Idea(const Idea& copy){
+Idea::Idea(const Idea& copy) {
 	uniqId = copy.getID();
 	proposer = copy.getProposer();
 	keywords = copy.getKeywords();
 	content = copy.getContent();
 }
 
-int Idea::getID() const{
+int Idea::getID() const {
 	return uniqId;
 }
 
-string Idea::getContent() const{
+string Idea::getContent() const {
 	return content;
 }
 
-string Idea::getProposer() const{
+string Idea::getProposer() const {
 	return proposer;
 }
 
-vector<string> Idea::getKeywords() const{
+vector<string> Idea::getKeywords() const {
 	return keywords;
 }
 void Idea::toString() {
@@ -54,12 +54,27 @@ void Idea::toString() {
 	cout << "Content: " << content << endl;
 }
 
-bool Idea::findWord(string word){
+bool Idea::findWord(string word) {
 	return (findContent(word) || findKeyword(word));
 }
 
 bool Idea::findContent(string word) {
-	return content.find(word);
+	string parsedString;
+	remove_copy_if(content.begin(), content.end(),
+			std::back_inserter(parsedString), //Store output
+			std::ptr_fun<int, int>(&std::ispunct));
+	transform(parsedString.begin(), parsedString.end(), parsedString.begin(),
+			::tolower);
+	string buf;
+	stringstream ss(parsedString);
+	while (ss >> buf) {
+		if (buf == word) {
+			return true;
+		}
+	}
+	return false;
+	//return content.find(word);
+
 }
 
 bool Idea::findKeyword(string word) {

@@ -90,6 +90,57 @@ string IdeasBank::parseContent(string unparsedString) {
 	return parsedString;
 }
 
+void IdeasBank::findWordInBank(string word) {
+	for (vector<Idea>::iterator i = bank.begin(); i != bank.end(); ++i) {
+		if (i->findWord(word)) {
+			i->toString();
+		}
+	}
+}
+
+void IdeasBank::findWordInIndexTree(string word) {
+	Index out;
+	invertedIndex.AVL_Retrieve(word, out);
+	if (out.idList.size() > 0) {
+		for (set<int>::iterator i = out.idList.begin(); i != out.idList.end();
+				++i) {
+			displayIdea(*i);
+		}
+	} else {
+		cout << "Not found in inverted index tree" << endl;
+	}
+}
+
+void IdeasBank::findRelatedIdeas(int ideaNumber) {
+	set<int> relatedList;
+	Idea temp = getIdea(ideaNumber);
+	string parsedContent = parseContent(temp.getContent());
+	Index out;
+	string word;
+	for (unsigned int i = 0; i < temp.getKeywords().size(); i++) {
+		word = temp.getKeywords().at(i);
+		invertedIndex.AVL_Retrieve(word, out);
+		relatedList.insert(out.idList.begin(), out.idList.end());
+	}
+	cout << "Related ideas of " << ideaNumber << " are: ";
+	for (set<int>::iterator i = relatedList.begin(); i != relatedList.end();
+			++i) {
+		if (ideaNumber != *i) {
+			cout << *i << " ";
+		}
+	}
+	cout << endl;
+
+}
+
+Idea IdeasBank::getIdea(int id) {
+	for (vector<Idea>::iterator i = bank.begin(); i != bank.end(); ++i) {
+		if (i->getID() == id) {
+			return *i;
+		}
+	}
+}
+
 //Do binary search here // make binary search function?? to find idea faster
 void IdeasBank::displayIdea(int id) {
 	for (vector<Idea>::iterator i = bank.begin(); i != bank.end(); ++i) {
@@ -101,11 +152,28 @@ void IdeasBank::displayIdea(int id) {
 
 //Do binary search here // make binary search function?? to find idea faster
 void IdeasBank::deleteIdea(int id) {
+	Idea beDeleted;
+	beDeleted = getIdea(id);
+	string word;
+	vector<string> keywords = beDeleted.getKeywords();
+	string parsedContent = parseContent(beDeleted.getContent());
+	stringstream ss(parsedContent);
+	for (vector<string>::const_iterator i = keywords.begin(); i != keywords.end();
+			++i) {
+		word = *i;
+		Index temp(word, beDeleted.getID());
+		invertedIndex.AVL_Delete(word, temp);
+	}
+	while (ss >> word) {
+		Index temp(word, beDeleted.getID());
+		invertedIndex.AVL_Delete(word, temp);
+	}
 	for (vector<Idea>::iterator i = bank.begin(); i != bank.end(); ++i) {
 		if (i->getID() == id) {
 			bank.erase(i);
 		}
 	}
+
 }
 
 void IdeasBank::displayBank() {

@@ -21,6 +21,10 @@
 struct Index {
 	string key;
 	set<int> idList;
+	int getFirstID() {
+		return *(idList.begin());
+	}
+	;
 	Index() {
 	}
 	Index(string value, int id) {
@@ -45,6 +49,10 @@ public:
 	vector<string> stringToKeywords(string);
 	string parseContent(string);
 
+	void findWordInBank(string);
+	void findWordInIndexTree(string);
+	void findRelatedIdeas(int);
+	Idea getIdea(int);
 	void displayIdea(int);
 	void deleteIdea(int);
 	void displayBank();
@@ -65,3 +73,4 @@ private:
 };
 
 #endif /* IDEASBANK_H_ */
+

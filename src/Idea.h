@@ -10,10 +10,14 @@
 
 #include <iostream>
 #include <vector>
+#include <sstream>
+#include <algorithm>
+#include <string>
 using namespace std;
 
 class Idea {
 public:
+	Idea(){};
 	Idea(string, vector<string>, string);
 	Idea(const Idea&);
 	virtual ~Idea();
