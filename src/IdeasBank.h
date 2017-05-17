@@ -27,7 +27,7 @@ struct Index {
 	;
 	void toString(){
 		cout << "key:" << key << endl;
-		cout << "idList: ";
+		cout << "ID: ";
 		for(set<int>::iterator it = idList.begin(); it != idList.end(); ++it){
 			cout << *it << " ";
 		}
@@ -69,7 +69,6 @@ public:
 	bool getIdea(int, Idea&);
 	void displayIdea(int);
 	void deleteIdea(int);
-	void deleteAVL(string, vector<string>, int);
 	void displayBank();
 
 	void ideaToIndex(Idea);
@@ -82,6 +81,7 @@ public:
 	;
 
 private:
+	void removeIdeaFromBank(vector<Idea>&, int);
 	vector<Idea> bank;
 	vector<Idea> Ideasvector;
 	AvlTree<Index, string> invertedIndex;
