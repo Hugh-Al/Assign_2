@@ -25,6 +25,14 @@ struct Index {
 		return *(idList.begin());
 	}
 	;
+	void toString(){
+		cout << "key:" << key << endl;
+		cout << "idList: ";
+		for(set<int>::iterator it = idList.begin(); it != idList.end(); ++it){
+			cout << *it << " ";
+		}
+		cout << endl;
+	}
 	Index() {
 	}
 	Index(string value, int id) {
@@ -36,6 +44,12 @@ struct Index {
 		idList = copy.idList;
 	}
 };
+
+//Jacks
+//struct Index {
+//	string key;
+//	vector<int> idList;
+//};
 
 class IdeasBank {
 public:
@@ -52,9 +66,10 @@ public:
 	void findWordInBank(string);
 	void findWordInIndexTree(string);
 	void findRelatedIdeas(int);
-	Idea getIdea(int);
+	bool getIdea(int, Idea&);
 	void displayIdea(int);
 	void deleteIdea(int);
+	void deleteAVL(string, vector<string>, int);
 	void displayBank();
 
 	void ideaToIndex(Idea);

@@ -98,47 +98,64 @@ void IdeasBank::findWordInBank(string word) {
 	}
 }
 
-void IdeasBank::findWordInIndexTree(string word) {
-	Index out;
-	invertedIndex.AVL_Retrieve(word, out);
-	if (out.idList.size() > 0) {
-		for (set<int>::iterator i = out.idList.begin(); i != out.idList.end();
-				++i) {
-			displayIdea(*i);
-		}
-	} else {
-		cout << "Not found in inverted index tree" << endl;
-	}
-}
+//void IdeasBank::findWordInIndexTree(string word) {
+//	Index out;
+//	invertedIndex.AVL_Retrieve(word, out);
+//	if (out.idList.size() > 0) {
+//		for (set<int>::iterator i = out.idList.begin(); i != out.idList.end();
+//				++i) {
+//			displayIdea(*i);
+//		}
+//	} else {
+//		cout << "Not found in inverted index tree" << endl;
+//	}
+//}
 
 void IdeasBank::findRelatedIdeas(int ideaNumber) {
 	set<int> relatedList;
-	Idea temp = getIdea(ideaNumber);
-	string parsedContent = parseContent(temp.getContent());
-	Index out;
-	string word;
-	for (unsigned int i = 0; i < temp.getKeywords().size(); i++) {
-		word = temp.getKeywords().at(i);
-		invertedIndex.AVL_Retrieve(word, out);
-		relatedList.insert(out.idList.begin(), out.idList.end());
-	}
-	cout << "Related ideas of " << ideaNumber << " are: ";
-	for (set<int>::iterator i = relatedList.begin(); i != relatedList.end();
-			++i) {
-		if (ideaNumber != *i) {
-			cout << *i << " ";
+	Idea temp;
+	// if idea number is in bank
+	if (getIdea(ideaNumber, temp)) {
+		vector<string> keys = temp.getKeywords();
+		string parsedContent = parseContent(temp.getContent());
+		Index out;
+		string word;
+		for (vector<string>::iterator it = keys.begin(); it != keys.end();
+				++it) {
+			word = *it;
+			invertedIndex.AVL_Retrieve(word, out);
+			relatedList.insert(out.idList.begin(), out.idList.end());
 		}
+		// Print set if size greater than 0 else inform user that the idea is unique
+		if (relatedList.size() > 0) {
+			cout << "Related ideas of " << ideaNumber << " are: ";
+			for (set<int>::iterator i = relatedList.begin();
+					i != relatedList.end(); ++i) {
+				if (ideaNumber != *i) {
+					cout << *i << " ";
+				}
+			}
+			cout << endl;
+		} else {
+			cout << "Idea number: " << ideaNumber << " is unique." << endl;
+		}
+
+	} // Id number is not in bank
+	else {
+		cout << "Idea number: " << ideaNumber
+				<< " does not exist in Invert Index" << endl;
 	}
-	cout << endl;
 
 }
 
-Idea IdeasBank::getIdea(int id) {
+bool IdeasBank::getIdea(int id, Idea& results) {
 	for (vector<Idea>::iterator i = bank.begin(); i != bank.end(); ++i) {
 		if (i->getID() == id) {
-			return *i;
+			results = *i;
+			return true;
 		}
 	}
+	return false;
 }
 
 //Do binary search here // make binary search function?? to find idea faster
@@ -150,30 +167,38 @@ void IdeasBank::displayIdea(int id) {
 	}
 }
 
+
+
+
 //Do binary search here // make binary search function?? to find idea faster
 void IdeasBank::deleteIdea(int id) {
 	Idea beDeleted;
-	beDeleted = getIdea(id);
-	string word;
-	vector<string> keywords = beDeleted.getKeywords();
-	string parsedContent = parseContent(beDeleted.getContent());
-	stringstream ss(parsedContent);
-	for (vector<string>::const_iterator i = keywords.begin(); i != keywords.end();
-			++i) {
-		word = *i;
-		Index temp(word, beDeleted.getID());
-		invertedIndex.AVL_Delete(word, temp);
-	}
-	while (ss >> word) {
-		Index temp(word, beDeleted.getID());
-		invertedIndex.AVL_Delete(word, temp);
-	}
-	for (vector<Idea>::iterator i = bank.begin(); i != bank.end(); ++i) {
-		if (i->getID() == id) {
-			bank.erase(i);
-		}
-	}
 
+	if (getIdea(id, beDeleted)) {
+		string word;
+		vector<string> keywords = beDeleted.getKeywords();
+		string parsedContent = parseContent(beDeleted.getContent());
+		stringstream ss(parsedContent);
+		for (vector<string>::const_iterator i = keywords.begin();
+				i != keywords.end(); ++i) {
+			word = *i;
+			cout << word << ", ";
+			Index temp(word, beDeleted.getID());
+			invertedIndex.AVL_Delete(word, temp);
+		}
+		cout << endl;
+		while (ss >> word) {
+			Index temp(word, beDeleted.getID());
+			invertedIndex.AVL_Delete(word, temp);
+		}
+//		for (vector<Idea>::iterator i = bank.begin(); i != bank.end(); ++i) {
+//			if (i->getID() == id) {
+//				bank.erase(i);
+//			}
+//		}
+	} else {
+		cout << "Id number " << id << " is not in idea bank or Index List." << endl;
+	}
 }
 
 void IdeasBank::displayBank() {
@@ -181,6 +206,7 @@ void IdeasBank::displayBank() {
 		i->toString();
 	}
 }
+
 
 void IdeasBank::ideaToIndex(Idea idea) {
 	//tokenise everything
@@ -202,66 +228,92 @@ void IdeasBank::ideaToIndex(Idea idea) {
 	}
 }
 
-Index IdeasBank::query(string word) {
-	Index out;
-	bool found = false;
-//	found = invertedIndex.AVL_Retrieve(word, out);
-	invertedIndex.AVL_Retrieve(word, out);
-//	if (found) {
-//		return out;
-//	}else {
-//		cout << word << " not found in inverted index: ";
+//JACKS
+//void IdeasBank::ideaToIndex(Idea idea) {
+////tokenise everything
+//	int indexID = idea.getID();
+//	vector<string> test = idea.getKeywords();
+//	for (vector<string>::const_iterator i = test.begin(); i != test.end();
+//			++i) {
+//		string value = *i;
+//		Index item;
+//		item.key = value;
+//		item.idList.push_back(indexID);
+//		invertedIndex.AVL_Insert(item);
 //	}
+//
+//	string parsedContent = parseContent(idea.getContent());
+//	string buf;
+//	stringstream ss(parsedContent);
+//	while (ss >> buf) {
+//		Index item;
+//		item.key = buf;
+//		item.idList.push_back(indexID);
+//		invertedIndex.AVL_Insert(item);
+//	}
+//}
 
-	cout << " value is " << out.key << endl;
-	return out;
-}
 
-void IdeasBank::query2(string argument) {
-	stringstream ss(argument);
-	string word;
-	vector<string> split;
-
-	while (ss >> word) {
-		split.push_back(word);
-	}
-	if (split.size() == 1) {
-		cout << "1 arg " << split.at(0);
-		query(split.at(0));
-		return;
-	}
-
-	string boolCond = split.at(1);
-	if (boolCond == "AND") {
-		Index first = query(parseContent(split.at(0)));
-		Index second = query(parseContent(split.at(2)));
-		set<int> intersect;
-		set_intersection(first.idList.begin(), first.idList.end(),
-				second.idList.begin(), second.idList.end(),
-				std::inserter(intersect, intersect.begin()));
-		cout << "Common id is: ";
-		for (set<int>::iterator i = intersect.begin(); i != intersect.end();
-				++i) {
-			cout << *i << ", ";
-		}
-		cout << endl;
-	} else if (boolCond == "OR") {
-		Index first = query(parseContent(split.at(0)));
-		Index second = query(parseContent(split.at(2)));
-		set<int> unionOfId = first.idList;
-		unionOfId.insert(second.idList.begin(), second.idList.end());
-		cout << "Id are: ";
-		for (set<int>::iterator i = unionOfId.begin(); i != unionOfId.end();
-				++i) {
-			cout << *i << ", ";
-		}
-		cout << endl;
-	} else {
-		cout
-				<< "Please provided correct argument format replacing boolean with either AND or OR"
-				<< endl;
-		cout << "word (BOOLEEAN OPERATOR) word" << endl;
-	}
+//Index IdeasBank::query(string word) {
+//	Index out;
+//	bool found = false;
+////	found = invertedIndex.AVL_Retrieve(word, out);
+//	invertedIndex.AVL_Retrieve(word, out);
+////	if (found) {
+////		return out;
+////	}else {
+////		cout << word << " not found in inverted index: ";
+////	}
+//
+//	cout << " value is " << out.key << endl;
+//	return out;
+//}
+//
+//void IdeasBank::query2(string argument) {
+//	stringstream ss(argument);
+//	string word;
+//	vector<string> split;
+//
+//	while (ss >> word) {
+//		split.push_back(word);
+//	}
+//	if (split.size() == 1) {
+//		cout << "1 arg " << split.at(0);
+//		query(split.at(0));
+//		return;
+//	}
+//
+//	string boolCond = split.at(1);
+//	if (boolCond == "AND") {
+//		Index first = query(parseContent(split.at(0)));
+//		Index second = query(parseContent(split.at(2)));
+//		set<int> intersect;
+//		set_intersection(first.idList.begin(), first.idList.end(),
+//				second.idList.begin(), second.idList.end(),
+//				std::inserter(intersect, intersect.begin()));
+//		cout << "Common id is: ";
+//		for (set<int>::iterator i = intersect.begin(); i != intersect.end();
+//				++i) {
+//			cout << *i << ", ";
+//		}
+//		cout << endl;
+//	} else if (boolCond == "OR") {
+//		Index first = query(parseContent(split.at(0)));
+//		Index second = query(parseContent(split.at(2)));
+//		set<int> unionOfId = first.idList;
+//		unionOfId.insert(second.idList.begin(), second.idList.end());
+//		cout << "Id are: ";
+//		for (set<int>::iterator i = unionOfId.begin(); i != unionOfId.end();
+//				++i) {
+//			cout << *i << ", ";
+//		}
+//		cout << endl;
+//	} else {
+//		cout
+//				<< "Please provided correct argument format replacing boolean with either AND or OR"
+//				<< endl;
+//		cout << "word (BOOLEEAN OPERATOR) word" << endl;
+//	}
 
 //	Index out;
 //	bool found = false;
@@ -277,5 +329,33 @@ void IdeasBank::query2(string argument) {
 //		cout << word << " not found in inverted index: ";
 //	}
 //	cout << endl  << "------------------------" << endl;
-}
+//}
 
+
+//void IdeasBank::deleteAVL(string content, vector<string> keywords, int id) {
+//	string word;
+//	string parsed = parseContent(content);
+//	istringstream contents(parsed);
+//	while (contents >> word) // streams over content
+//	{
+//		Index newItem;
+//		newItem.idList.push_back(id);
+//		invertedIndex.AVL_Delete(word, newItem);
+//	}
+//	for (int i = 0; i < keywords.size(); i++) {
+//		Index newItem;
+//		newItem.idList.push_back(id);
+//		invertedIndex.AVL_Delete(keywords[i], newItem);
+//	}
+//}
+//JACKS
+//void IdeasBank::deleteIdea(int id) {
+//	Idea beDeleted;
+//	if (getIdea(id, beDeleted)) {
+//		deleteAVL(beDeleted.getContent(), beDeleted.getKeywords(),
+//				beDeleted.getID());
+//	} else {
+//		cout << "Id number " << id << " is not in idea bank or Index List."
+//				<< endl;
+//	}
+//}

@@ -17,65 +17,37 @@ void print(Index ss) {
 	for (set<int>::iterator i = ss.idList.begin(); i != ss.idList.end(); ++i) {
 		cout << *i << " ";
 	}
+//	for (vector<int>::iterator i = ss.idList.begin(); i != ss.idList.end(); ++i) {
+//		cout << *i << " ";
+//	}
 	cout << endl;
 }
 
 int main() {
-//	vector<string> keyword;
-//	vector<string> k2, k3;
-//	keyword.push_back("alphabet");
-//	keyword.push_back("typing");
-//	keyword.push_back("animals");
-//	k2.push_back("hello");
-//	k2.push_back("world");
-//	k3.push_back("Goodbye humans");
-//
-//	Idea test("Huy", keyword, "The quick brown fox jumps over the lazy dog.");
-//	Idea test2("Monkey", k2, "Why dear god, why");
-//	Idea test3("Taxi", k3, "I didn't ask to be born.");
-//
-//	IdeasBank please;
-//	please.insertIdea(test);
-//	please.insertIdea(test2);
-//	please.insertIdea(test3);
-//
-//	please.insertData();
-//	please.displayBank();
-//	please.deleteIdea(2);
-//	please.displayBank();
-
-//	IdeasBank example;
-//	example.ideaFile();
 
 	IdeasBank testing;
-	testing.insertFile("input2.txt");
+	testing.insertFile("input.txt");
+//	testing.getTree().AVL_Print();
 //	testing.insertData();
 //	testing.insertData();
 
-	//testing.displayBank();
+//testing.displayBank();
 //	testing.getTree().AVL_Print();
 //	testing.query2("wife AND THE");
 //	testing.query2("A OR kiss");
 
-testing.displayBank();
-	cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl << endl;
-
-	testing.findRelatedIdeas(5);
-	testing.findRelatedIdeas(4);
-	testing.getTree().AVL_Traverse(print);
-//	testing.deleteIdea(4);
-//	testing.deleteIdea(6);
-//	testing.deleteIdea(5);
-//	testing.deleteIdea(1);
-//	testing.deleteIdea(2);
-//	testing.deleteIdea(3);
-//	testing.deleteIdea(7);
-//	testing.deleteIdea(8);
-//	cout << "\n\n AFTER DELETING !!!!!!!!!!!!!!!!!!!!! \n\n";
 //	testing.displayBank();
 //	testing.getTree().AVL_Traverse(print);
+	testing.deleteIdea(1);
+	testing.deleteIdea(2);
+	testing.deleteIdea(3);
+	testing.deleteIdea(4);
+//	testing.displayBank();
+	testing.getTree().AVL_Traverse(print);
+	cout << "finished";
+//	testing.getTree().AVL_Print();
 
-	//testing.getTree().AVL_Traverse(print);
+//testing.getTree().AVL_Traverse(print);
 
 	return 0;
 }
