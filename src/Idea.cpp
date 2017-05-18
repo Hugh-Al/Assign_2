@@ -73,8 +73,6 @@ bool Idea::findContent(string word) {
 		}
 	}
 	return false;
-	//return content.find(word);
-
 }
 
 bool Idea::findKeyword(string word) {

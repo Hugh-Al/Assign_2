@@ -161,7 +161,6 @@ bool IdeasBank::getIdea(int id, Idea& results) {
 	return false;
 }
 
-//Do binary search here // make binary search function?? to find idea faster
 void IdeasBank::displayIdea(int id) {
 	for (vector<Idea>::iterator i = bank.begin(); i != bank.end(); ++i) {
 		if (i->getID() == id) {
@@ -177,7 +176,7 @@ void IdeasBank::removeIdeaFromBank(vector<Idea>& bankOfIdeas, int id) {
 					{	return idea.getID() == id;}), bankOfIdeas.end());
 }
 
-//Do binary search here // make binary search function?? to find idea faster
+
 void IdeasBank::deleteIdea(int id) {
 	Idea beDeleted;
 
