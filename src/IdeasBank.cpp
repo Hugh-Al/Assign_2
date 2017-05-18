@@ -180,31 +180,24 @@ void IdeasBank::removeIdeaFromBank(vector<Idea>& bankOfIdeas, int id) {
 //Do binary search here // make binary search function?? to find idea faster
 void IdeasBank::deleteIdea(int id) {
 	Idea beDeleted;
-	cout << "Hello" << endl;
 
 	if (getIdea(id, beDeleted)) {
-		cout << "we in" << endl;
 		string word;
 		vector<string> keywords = beDeleted.getKeywords();
 		string parsedContent = parseContent(beDeleted.getContent());
 		stringstream ss(parsedContent);
-		cout << "geting here" << endl;
-		for (vector<string>::const_iterator i = keywords.begin();
+		for (vector<string>::iterator i = keywords.begin();
 				i != keywords.end(); ++i) {
 			word = *i;
-			cout << word << " ";
 			Index temp(word, beDeleted.getID());
 			invertedIndex.AVL_Delete(word, temp);
 		}
-		cout << "deleted keywords" << endl;
-		cout << endl;
 		while (ss >> word) {
 			Index temp(word, beDeleted.getID());
 			invertedIndex.AVL_Delete(word, temp);
 		}
-		cout << "deleted content" << endl;
 		removeIdeaFromBank(bank, beDeleted.getID());
-		cout << "deleted bank" << endl;
+
 	} else {
 		cout << "Id number " << id << " is not in idea bank or Index List."
 				<< endl;

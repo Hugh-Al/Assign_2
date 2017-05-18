@@ -142,10 +142,19 @@ NODE<TYPE>* AvlTree<TYPE, KTYPE>::_insert(NODE<TYPE> *root, NODE<TYPE> *newPtr,
 		return root;
 	} //  if NULL tree
 
+
+
 	//If root already in AVL_tree
 	if (newPtr->data.key == root->data.key) {
 		root->data.idList.insert(newPtr->data.idList.begin(),
 				newPtr->data.idList.end());
+//		cout << root->data.key << " before correuption" << endl;
+//		for (set<int>::iterator i = root->data.idList.begin(); i != root->data.idList.end();
+//				++i) {
+//			cout << *i << " ";
+//		}
+//		cout << endl;
+
 		return root;
 	}
 
@@ -403,6 +412,7 @@ NODE<TYPE>* AvlTree<TYPE, KTYPE>::_delete(NODE<TYPE> *root, KTYPE dltKey,
 	NODE<TYPE> *dltPtr;
 	NODE<TYPE> *exchPtr;
 	NODE<TYPE> *newRoot;
+
 
 // 	Statements
 	if (!root) {
@@ -870,6 +880,5 @@ void AvlTree<TYPE, KTYPE>::_print(NODE<TYPE> *root, int level) {
 	} /* if */
 
 } /* AVL_Print */
-
 
 #endif /* AVL_ADT_H_ */

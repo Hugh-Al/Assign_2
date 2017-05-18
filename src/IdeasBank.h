@@ -45,11 +45,6 @@ struct Index {
 	}
 };
 
-//Jacks
-//struct Index {
-//	string key;
-//	vector<int> idList;
-//};
 
 class IdeasBank {
 public:

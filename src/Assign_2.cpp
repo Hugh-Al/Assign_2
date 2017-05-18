@@ -12,7 +12,7 @@
 #include "IdeasBank.h"
 using namespace std;
 
-IdeasBank globalIndex;
+
 
 void print(Index ss) {
 	cout << ss.key << " - ";
@@ -22,7 +22,32 @@ void print(Index ss) {
 	cout << endl;
 }
 
-void performAction(int input) {
+void performAction(IdeasBank&, int);
+
+int main() {
+	IdeasBank globalIndex;
+
+	int input;
+	do {
+		cout << "Menu" << endl;
+		cout << "1. Import ideas from a file" << endl;
+		cout << "2. Input idea manually" << endl;
+		cout << "3. Print idea bank" << endl;
+		cout << "4. Search for related ideas from ideas bank" << endl;
+		cout << "5. Search for related ideas from indexing tree" << endl;
+		cout << "6. Related ideas of an idea" << endl;
+		cout << "7. Delete an idea" << endl;
+		cout << "8. Print the word indices" << endl;
+		cout << "9. Quit" << endl;
+		cin >> input;
+		performAction(globalIndex, input);
+	} while (input != 9);
+    cout << "Pause" << endl;
+    cin >> input;
+	return 0;
+}
+
+void performAction(IdeasBank& globalIndex, int input) {
 	switch (input) {
 	case 1: {
 		string filepath;
@@ -73,49 +98,13 @@ void performAction(int input) {
 		globalIndex.getTree().AVL_Traverse(print);
 	}
 		break;
-	case 9: {
-
-	}
-		break;
+//	case 9: {
+//
+//	}
+//		break;
 	default: {
-	}
+		cout << "Terminated:" << endl;
 		break;
 	}
-}
-
-int main() {
-
-	IdeasBank testing;
-	testing.insertFile("input.txt");
-//	testing.insertFile("input2.txt");
-//	testing.displayIdea(3);
-	testing.getTree().AVL_Traverse(print);
-//	testing.displayBank();
-	testing.deleteIdea(3);
-//	testing.deleteIdea(6);
-//	testing.displayBank();
-//	testing.getTree().AVL_Traverse(print);
-
-//    testing.query2("A");
-//	testing.query2("wife AND THE");
-//	testing.query2("wife OR THE");
-//	testing.query2("A OR kiss");
-
-//	int input;
-//	do {
-//		cout << "Menu" << endl;
-//		cout << "1. Import ideas from a file" << endl;
-//		cout << "2. Input idea manually" << endl;
-//		cout << "3. Print idea bank" << endl;
-//		cout << "4. Search for related ideas from ideas bank" << endl;
-//		cout << "5. Search for related ideas from indexing tree" << endl;
-//		cout << "6. Related ideas of an idea" << endl;
-//		cout << "7. Delete an idea" << endl;
-//		cout << "8. Print the word indices" << endl;
-//		cout << "9. Quit" << endl;
-//		cin >> input;
-//		performAction(input);
-//	} while (input != 9);
-
-	return 0;
+	}
 }
