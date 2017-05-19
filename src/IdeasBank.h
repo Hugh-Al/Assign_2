@@ -25,10 +25,10 @@ struct Index {
 		return *(idList.begin());
 	}
 	;
-	void toString(){
+	void toString() {
 		cout << "key:" << key << endl;
 		cout << "ID: ";
-		for(set<int>::iterator it = idList.begin(); it != idList.end(); ++it){
+		for (set<int>::iterator it = idList.begin(); it != idList.end(); ++it) {
 			cout << *it << " ";
 		}
 		cout << endl;
@@ -45,29 +45,20 @@ struct Index {
 	}
 };
 
-
 class IdeasBank {
 public:
 	IdeasBank();
 	virtual ~IdeasBank();
 
-	// Data insertion, user input, existing idea, file input
 	void insertData();
 	void insertIdea(Idea);
 	void insertFile(string);
-	vector<string> stringToKeywords(string);
-	string parseContent(string);
-
 	void findWordInBank(string);
 	void findWordInIndexTree(string);
 	void findRelatedIdeas(int);
-	bool getIdea(int, Idea&);
 	void displayIdea(int);
 	void deleteIdea(int);
 	void displayBank();
-
-	void ideaToIndex(Idea);
-	Index query(string);
 	void query2(string);
 
 	AvlTree<Index, string> getTree() {
@@ -76,6 +67,11 @@ public:
 	;
 
 private:
+	void ideaToIndex(Idea);
+	bool getIdea(int, Idea&);
+	vector<string> stringToKeywords(string);
+	string parseContent(string);
+	Index query(string);
 	void removeIdeaFromBank(vector<Idea>&, int);
 	vector<Idea> bank;
 	vector<Idea> Ideasvector;

@@ -63,9 +63,7 @@ void IdeasBank::insertFile(string file) {
 		getline(dataInput, clearLine);
 		getline(dataInput, clearLine);
 
-		//convert string to keyword, keep content with punctuations? function ready to remove it
 		vector<string> tempKeyword = stringToKeywords(stringKeyword);
-
 		Idea tempIdea(propName, tempKeyword, tempContent);
 		bank.push_back(tempIdea);
 		ideaToIndex(tempIdea);
